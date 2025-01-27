@@ -1,26 +1,14 @@
 import { Router, Request, Response } from 'express';
-import Task from '../../../Models/task.Model';
+import Task from '../Models/task.Model';
+
+import * as controller from '../Controllers/task.Controller';
+
 const router: Router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
-    const tasks = await Task.find({ deleted: false });
-    res.json({
-        code: 200,
-        message: 'list tasks',
-        tasks: tasks
-    });
-});
 
-router.get('/detail/:id', async (req: Request, res: Response) => {
-    const id: string = req.params.id;
+router.get('/', controller.index);
 
-    const task = await Task.findOne({ _id: id, deleted: false });
-    res.json({
-        code: 200,
-        message: 'detail task',
-        task: task
-    });
-});
+router.get('/detail/:id', controller.detail);
 
 // router.patch('/change-status/:id', controller.changeStatus);
 // router.patch('/change-multi', controller.changeMulti);
