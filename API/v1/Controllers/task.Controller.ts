@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import Task from '../Models/task.Model';
 import paginationHelper from '../../../Helpers/pagination';
+import searchHelper from '../../../Helpers/search';
 
 export const index = async (req: Request, res: Response) => {
-    const find: { deleted: boolean, status?: string } = { 
+    const find: { 
+        deleted: boolean, 
+        status?: string,
+        title?: RegExp
+    } = { 
         deleted: false
     };
     //filter
@@ -14,6 +19,12 @@ export const index = async (req: Request, res: Response) => {
     const sort: Record<string, "asc" | "desc"> = {};
     if (req.query.sortKey && req.query.sortValue) {
         sort[req.query.sortKey as string] = (req.query.sortValue === 'asc' ? 'asc' : 'desc');
+    }
+    //search
+    const objectSearch = searchHelper(req.query);
+
+    if (req.query.keyword) {
+        find.title = objectSearch.regex;
     }
     //pagination
     const initPagination = {
