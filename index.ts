@@ -10,6 +10,9 @@ database.connect();
 const app: Express = express();
 const port: Number | String = process.env.PORT || 3001;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 mainV1Routers(app);
 
 app.listen(port, () => {

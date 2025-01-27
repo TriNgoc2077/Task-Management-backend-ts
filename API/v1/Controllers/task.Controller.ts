@@ -58,3 +58,52 @@ export const detail = async (req: Request, res: Response) => {
         task: task
     });
 }
+
+export const changeStatus = async (req: Request, res: Response) => {
+    try {    
+        const id: string = req.params.id;
+        await Task.updateOne(
+            { _id: id },
+            { status: req.body.status }
+        );
+
+        res.json({
+            code: 200,
+            message: "change status successfully !",
+        });
+    } catch(error) {
+        res.json({
+            code: 400,
+            message: "change status failed !"
+        });
+    }
+}
+
+export const changeMulti = async (req: Request, res: Response) => {
+    try {
+        enum Key {
+            status = "status",
+
+        }
+        const ids: string[] = req.body.ids;
+        const key: Key = req.body.key;
+        const value: string = req.body.value;
+
+        if (key === Key.status) {
+            await Task.updateMany(
+                { _id: { $in: ids } },
+                { status: value }
+            );
+        }
+
+        res.json({
+            code: 200,
+            message: "change status successfully !"
+        });
+    } catch(error) {
+        res.json({
+            code: 400, 
+            message: "change status failed !"
+        });
+    }
+}
