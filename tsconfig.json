@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES6", //Js version ES6
+      "module": "commonjs", //module system in nodejs
+      "outDir": "./dist", 
+      "strict": true, //tightly test ts code
+      "removeComments": true, 
+      "esModuleInterop": true //use "import" instead of "require" 
+    },
+    "include": ["./**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  
