@@ -122,7 +122,7 @@ export const otpPassword = async (req: Request, res: Response) => {
 // [POST] api/v1/user/password/reset
 export const resetPassword = async (req: Request, res: Response) => {
     try {
-        const token = req.body.token;
+        const token = req.headers.authorization?.split(' ')[1];
         const password = md5(req.body.password);
         const passwordConfirm = md5(req.body.passwordConfirm);
         const user = await User.findOne({ userToken: token });
@@ -142,6 +142,56 @@ export const resetPassword = async (req: Request, res: Response) => {
         res.json({
             code: 200, 
             token: user.userToken
+        });
+    } catch(error) {
+        res.json({
+            code: 400,
+            message: (error as Error).message,
+        });
+    }
+} 
+
+// [POST] api/v1/user/profile
+export const profile = async (req: Request, res: Response) => {
+    try {
+        
+        res.json({
+            code: 200, 
+            infor: (req as any).user
+        });
+    } catch(error) {
+        res.json({
+            code: 400,
+            message: (error as Error).message,
+        });
+    }
+} 
+// [POST] api/v1/user/detail/:id
+export const detailUser = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id, deleted: false });
+        if (!user) {
+            throw new Error('User does not exist !');
+        }
+        res.json({
+            code: 200, 
+            user: user
+        });
+    } catch(error) {
+        res.json({
+            code: 400,
+            message: (error as Error).message,
+        });
+    }
+} 
+// [POST] api/v1/user/listUser
+export const listUser = async (req: Request, res: Response) => {
+    try {
+        const users = await User.find({ deleted: false }).select("fullName email");
+
+        res.json({
+            code: 200, 
+            users: users
         });
     } catch(error) {
         res.json({
