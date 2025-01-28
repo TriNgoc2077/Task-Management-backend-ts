@@ -151,31 +151,12 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 } 
 
-// [POST] api/v1/user/profile
-export const profile = async (req: Request, res: Response) => {
-    try {
-        
-        res.json({
-            code: 200, 
-            infor: (req as any).user
-        });
-    } catch(error) {
-        res.json({
-            code: 400,
-            message: (error as Error).message,
-        });
-    }
-} 
 // [POST] api/v1/user/detail/:id
 export const detailUser = async (req: Request, res: Response) => {
     try {
-        const user = await User.findOne({ _id: req.params.id, deleted: false });
-        if (!user) {
-            throw new Error('User does not exist !');
-        }
         res.json({
             code: 200, 
-            user: user
+            user: (req as any).user
         });
     } catch(error) {
         res.json({
