@@ -82,17 +82,25 @@ export const changeStatus = async (req: Request, res: Response) => {
 export const changeMulti = async (req: Request, res: Response) => {
     try {
         enum Key {
-            status = "status",
-
+            STATUS = "status",
+            DELETE = "delete"
         }
         const ids: string[] = req.body.ids;
         const key: Key = req.body.key;
         const value: string = req.body.value;
 
-        if (key === Key.status) {
+        if (key === Key.STATUS) {
             await Task.updateMany(
                 { _id: { $in: ids } },
                 { status: value }
+            );
+        } else if (key === Key.DELETE) {
+            await Task.updateMany(
+                { _id: { $in: ids } },
+                {
+                    deleted: true,
+                    deletedAt: new Date()
+                }
             );
         }
 

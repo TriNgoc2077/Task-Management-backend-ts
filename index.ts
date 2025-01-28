@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import * as database from './Config/database';
 import dotenv from 'dotenv';
 import mainV1Routers from './API/v1/Routers/index.Router';
+import cors from "cors";
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const port: Number | String = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 mainV1Routers(app);
 
 app.listen(port, () => {
