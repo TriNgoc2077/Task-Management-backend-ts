@@ -107,3 +107,62 @@ export const changeMulti = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const createTask = async (req: Request, res: Response) => {
+    try {
+        const task = new Task(req.body);
+        const data = await task.save();
+        
+        res.json({
+            code: 200,
+            message: "create successfully !",
+            data: data
+        });
+    } catch(error) {
+        res.json({
+            code: 400, 
+            message: "create failed !"
+        });
+    }
+}
+
+export const editTask = async (req: Request, res: Response) => {
+    try {
+        await Task.updateOne(
+            { _id: req.params.id },
+            req.body
+        );
+        
+        res.json({
+            code: 200,
+            message: "edit successfully !",
+        });
+    } catch(error) {
+        res.json({
+            code: 400, 
+            message: "edit failed !"
+        });
+    }
+}
+
+export const deleteTask = async (req: Request, res: Response) => {
+    try {
+        await Task.updateOne(
+            { _id: req.params.id },
+            { 
+                deleted: true,
+                deletedAt: new Date()
+            }
+        );
+        
+        res.json({
+            code: 200,
+            message: "delete successfully !",
+        });
+    } catch(error) {
+        res.json({
+            code: 400, 
+            message: "delete failed !"
+        });
+    }
+}
